@@ -17,6 +17,6 @@ public class Rotator : MonoBehaviour
 
         var mouseX = Input.GetAxisRaw("Mouse X");
 
-        this.transform.RotateAround(this.Center.position, Vector3.up, 10 * mouseX);
+        this.transform.RotateAround(this.Center.position, Vector3.up, 300 * mouseX * Time.deltaTime);
     }
 }
