@@ -5,18 +5,42 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField]
-    Transform Target;
+    public Transform Target;
 
     [SerializeField]
-    float Speed = 0;
+    float Speed;
+
+    [SerializeField]
+    bool ShouldMove;
 
     void Start()
     {
-
+        this.ShouldMove = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        if (!this.ShouldMove) return;
+
+        this.transform.position = Vector3.MoveTowards(this.transform.position, this.Target.position, this.Speed * Time.fixedDeltaTime);
+    }
+
+    void OnCollisionEnter(Collision colision)
+    {
+        if (colision.gameObject.name != "Moon")
+            return;
+
+        this.ShouldMove = false;
+        Destroy(this.GetComponent<Rigidbody>());
+        PubSub.Instance.Publish(
+            Topics.MOVER_REACHED_THE_END,
+            new MerikhManager.OnMoverReachedTheEndArgs
+            {
+                DamageToInflict = 20,
+                GameObject = this.gameObject,
+                Target = this.Target
+            }
+        );
 
     }
 }

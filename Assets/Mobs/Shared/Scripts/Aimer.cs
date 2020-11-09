@@ -13,8 +13,13 @@ public class Aimer : MonoBehaviour
         this.ShootTargeter = this.GetComponent<ShootTargeter>();
     }
 
-    void Update()
+    void LateUpdate()
     {
-
+        if (this.ShootTargeter.GetTarget() != null)
+        {
+            this.gameObject.transform.LookAt(this.ShootTargeter.GetTarget());
+            if (this.gameObject.name == "Cube")
+                Debug.DrawRay(this.transform.position, this.transform.forward * 10, Color.red);
+        }
     }
 }
